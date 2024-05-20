@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>로그인</title>
+	<!-- Bootstrap CSS -->
+	<link href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Font Awesome Icons -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<style>
+		.btn-icon {
+			display: flex;
+			flex-direction: column;
+			/* 아이콘과 텍스트를 세로로 배치 */
+			align-items: center;
+			justify-content: center;
+			padding: 30px 60px;
+			/* 버튼 내부 패딩 크기 조절 */
+			margin: 10px;
+			/* 버튼 사이의 간격 조절 */
+			font-size: 24px;
+			/* 아이콘 크기 조절 */
+			text-align: center;
+			/* 텍스트 가운데 정렬 */
+			width: 300px;
+			/* 버튼 너비 설정 */
+			height: 200px;
+			/* 버튼 높이 설정 */
+			transition: all 0.3s ease-in-out;
+			/* 스무디한 애니메이션 효과 */
+		}
+
+		.btn-container {
+			display: flex;
+			justify-content: center;
+			/* 버튼을 수평 중앙으로 정렬 */
+			margin-top: 50px;
+			/* 버튼과 카드 사이의 간격 조절 */
+		}
+
+		.card-title {
+			text-align: center;
+			/* 카드 제목 가운데 정렬 */
+			font-size: 36px;
+			/* 카드 제목 크기 키우기 */
+			font-weight: bold;
+			/* 굵은 글씨체로 설정 */
+			margin-bottom: 30px;
+			/* 카드 제목과 버튼 사이 간격 조절 */
+			white-space: nowrap;
+			/* 줄 바꿈 방지 */
+		}
+
+		@media screen and (max-width: 768px) {
+			.btn-container {
+				flex-direction: column;
+				/* 화면이 작아지면 버튼을 세로로 배치 */
+				align-items: center;
+				/* 가운데 정렬 */
+			}
+
+			.btn-icon {
+				width: 100%;
+				/* 버튼의 너비를 100%로 설정하여 가로로 꽉 채우기 */
+				margin: 10px 0;
+				/* 버튼 사이의 간격 조절 */
+			}
+		}
+	</style>
+</head>
+
+<body>
+ <div layout:fragment="content">
+
+	<!-- Content here -->
+	<div class="container mt-5" th:fragment="selectMemberType">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<form th:action="@{/loginPro}" method="post">
+							<div class="mb-3">
+								<label for="username" class="form-label">이메일(아이디):</label>
+								<input type="text" class="form-control" id="username" placeholder="Enter email(id)" name="username">
+							</div>
+							<div class="mb-3">
+								<label for="password" class="form-label">비밀번호:</label>
+								<input type="password" class="form-control" id="password" placeholder="Enter password"
+									name="password">
+							</div>
+							<button type="submit" class="btn btn-secondary">로그인</button>
+							<a th:href="@{/join/selectJoin}" class="btn btn-secondary">회원가입</a>				
+						</form>
+						
+						<!-- 로그인 페이지에서 에러 메시지 표시 -->
+						<div th:if="${param.error}">
+							<p style="color: red;">로그인에 실패했습니다. 아이디와 비밀번호를 다시 확인하세요.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Bootstrap JS and dependencies -->
+	<script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 보기 페이지</title>
+    <!-- 기존 CSS 링크는 유지됩니다 -->
+    <style>
+        body {
+            background-color: #eff1f5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #4e73df;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #333;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+
+        .btn-primary, .btn-danger, .btn-secondary, .btn-success {
+            display: block;
+            width: auto;
+            padding: 10px 15px;
+            margin: 3px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4e73df;
+            color: #ffffff;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover, .btn-danger:hover, .btn-secondary:hover, .btn-success:hover {
+            background-color: #2e59d9;
+            border-color: #2653d4;
+        }
+
+        .text-end {
+            text-align: right;
+        }
+        .btn {
+            display: inline-block; /* 버튼을 인라인 블록 요소로 설정 */
+            width: auto; /* 자동 너비 설정 */
+            padding: 10px 20px; /* 내부 패딩을 통해 버튼 크기 조절 */
+            margin: 3px; /* 주변 요소와의 간격 */
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+        }
+
+        .btn-danger {
+            background-color: #e74a3b; /* 빨간색 배경 */
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background-color: #d26a5c; /* 호버 시의 색상을 약간 어둡게 */
+        }
+
+        .text-end {
+            text-align: right;
+        }
+    </style>
+</head>
+
+<div layout:fragment="content">
+	<h3 class="m-3">[[${board.writer }]]의글보기</h3>
+<input type="hidden" id="num" name="num" th:value="${board.num}" />
+
+	<div class="m-3">
+		<label for="title">Title:</label> <input type="text"
+			class="form-control" id="title" th:value="${board.title }"
+			readonly="readonly">
+	</div>
+	<div class="m-3">
+		<label for="writer">Writer:</label> <input type="text"
+			class="form-control" id="writer" th:value="${board.writer }"
+			readonly="readonly" name="writer">
+	</div>
+	<div class="m-3">
+		<label for="content">Content:</label>
+		<textarea class="form-control" rows="5" id="content" name="content"
+			readonly="readonly">[[${board.content }]]</textarea>
+	</div>
+
+	<div class="text-end m-3"
+		th:if="${authentication != null and authentication.name == board.writer}">
+		<a href="#" class="btn btn-secondary btn-sm"
+			th:href="@{/board/update/{num}(num=${board.num})}">수정</a> <a href="#"
+			class="btn btn-danger btn-sm"
+			th:href="@{/board/delete/{num}(num=${board.num})}"
+			onclick="return confirm('정말 삭제할까요?')">삭제</a>
+
+
+	</div>
+
+	<!-- <div class="m-3">
+		<label for="msg">Comment:</label>
+		<textarea class="form-control" rows="3" id="msg" name="msg"></textarea>
+	</div>
+	<button class="btn btn-success btn-sm" id="commentBtn">Comment
+		Write</button>
+	<div id="replyResult"></div> -->
+
+</div>
+
+<script type="text/javascript">
+	//삭제
+	$("#btnDelete").click(function() {
+		if (!confirm('정말 삭제할까요?')) { // confirm('정말 삭제할까요?')==false
+			return false;
+		}
+		$.ajax({
+			type : "DELETE",
+			url : "/board/delete/${board.num}",
+			success : function(resp) {
+				alert(resp + "번 삭제 성공")
+				location.href = "/board/list";
+			},
+			error : function(e) {
+				alert("삭제실패 : " + e)
+			}
+		}) //ajax
+	}) //btnDelete
+</script>
+
+
+
+</html>

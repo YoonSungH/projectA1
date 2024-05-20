@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<head>
+<meta charset="UTF-8">
+<title>User Information Update</title>
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+ <style>
+        body {
+            background-color: #eff1f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2.text-center {
+            color: #4e73df;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            color: #4e73df;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+        .btn-custom {
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-custom:hover {
+            background-color: #375a7f;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
+	$(document).ready(function() {
+		$("#btnUpdate").click(function() {
+
+			if ($("#name").val() == "") {
+				alert("이름을 입력하세요")
+				$("#name").focus();
+				return false;
+			}
+			if ($("#email").val() == "") {
+				alert("이메일(아이디)을 입력하세요")
+				$("#email").focus();
+				return false;
+			}
+			if ($("#password").val() == "") {
+				alert("비밀번호를 입력하세요")
+				$("#password").focus();
+				return false;
+			}
+			if ($("#password").val() != $("#pass_check").val()) {
+				alert("비밀번호가 일치하지 않습니다.")
+				$("#pass_check").focus();
+				return false;
+			}
+			if ($("#phoneNumber").val() == "") {
+				alert("전화번호를 입력하세요")
+				$("#phoneNumber").focus();
+				return false;
+			}
+			if ($("#address").val() == "") {
+				alert("주소를 입력하세요")
+				$("#address").focus();
+				return false;
+			}
+
+			var data = {
+				name : $("#name").val(),
+				email : $("#email").val(),
+				password : $("#password").val(),
+				phoneNumber : $("#phoneNumber").val(),
+				address : $("#address").val()
+			};
+			$.ajax({
+				type : "POST",
+				url : "/owner/update",
+				contentType : "application/json;charset=utf-8",
+				data : JSON.stringify(data),
+				success : function(resp) {
+					if (resp === "success") {
+						alert($("#name").val() + "님의 대표자정보가 수정되었습니다.");
+						window.location.href = "/owner/ownerpage";
+					} else if (resp === "fail") {
+						alert("대표자정보 수정에 실패했습니다.");
+					}
+				},
+				error : function(xhr, status, error) {
+					alert("Error: " + error);
+				}
+			});
+		});
+	});
+</script>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="container mt-5">
+			<div class="title">
+				<h2>회원정보 수정</h2>
+			</div>
+			<form id="updateForm">
+				<div class="form-group">
+					<label for="name">이름 :</label> <input type="text" id="name"
+						name="name" class="form-control"
+						th:value="${authentication.principal.user.name}" />
+				</div>
+				<div class="form-group">
+					<label for="email">이메일 :</label> <input type="email" id="email"
+						name="email" class="form-control"
+						th:value="${authentication.principal.user.email}" />
+				</div>
+				<div class="form-group">
+					<label for="password">비밀번호 :</label> <input type="password"
+						id="password" name="password" class="form-control" />
+				</div>
+				<div class="form-group">
+					<label for="pass_check">비밀번호 확인:</label> <input type="password"
+						class="form-control" id="pass_check" placeholder="비밀번호를 다시 입력하세요"
+						name="pass_check">
+				</div>
+				<div class="form-group">
+					<label for="phoneNumber">전화번호 :</label> <input type="text"
+						id="phoneNumber" name="phoneNumber" class="form-control"
+						th:value="${authentication.principal.user.phoneNumber}" />
+				</div>
+				<div class="form-group">
+					<label for="address">주소 :</label> <input type="text" id="address"
+						name="address" class="form-control"
+						th:value="${authentication.principal.user.address}" />
+				</div>
+				<button type="button" class="btn btn-custom" id="btnUpdate">수정
+					완료</button>
+				<button type="button" class="btn btn-custom">
+					<a th:href="@{/owner/ownerpage}"
+						style="text-decoration: none; color: white;">돌아가기</a>
+				</button>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>

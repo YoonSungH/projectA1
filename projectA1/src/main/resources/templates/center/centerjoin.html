@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Center 등록</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #eff1f5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2.text-center {
+            color: #4e73df; /* 파란색 */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            color: #4e73df; /* 파란색 */
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="time"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="time"]:focus,
+        input[type="file"]:focus {
+            border-color: #4e73df; /* 파란색 */
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+
+        .btn-primary {
+            width: auto;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4e73df; /* 파란색 */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #375a7f; /* 진한 파란색 */
+        }
+    </style>
+
+    <script>
+    $(document).ready(function() {
+    	
+    	
+        $("#btnRegister").click(function() {
+        	 var isValid = true; // 적합성 여부를 저장하는 변수
+
+             if ($("#name").val() == "") {
+                alert("센터이름을 입력하세요");
+                $("#name").focus();
+                isValid = false;
+             } else if ($("#address").val() == "") {
+                alert("주소를 입력하세요");
+                $("#address").focus();
+                isValid = false;
+             } else if ($("#phoneNumber").val() == "") {
+                alert("전화번호를 입력하세요");
+                $("#phoneNumber").focus();
+                isValid = false;
+             } else if ($("#dailyPassPrice").val() == "") {
+                alert("일일권 가격을 입력하세요");
+                $("#dailyPassPrice").focus();
+                isValid = false;
+             } else if ($("#openTime").val() == "") {
+                alert("오픈시간을 선택하세요");
+                $("#openTime").focus();
+                isValid = false;
+             } else if ($("#closingTime").val() == "") {
+                alert("마감시간을 선택하세요");
+                $("#closingTime").focus();
+                isValid = false;
+             } else if (!$("#image").val()) {
+                alert("사진을 첨부하세요");
+                isValid = false;
+             }
+             
+             if (!isValid) {
+                return false; // 적합성이 검사되지 않았다면 중단
+             }
+            var formData = new FormData();
+            formData.append('id', $("#id").val()); // ID 추가
+            formData.append('image', $('#image')[0].files[0]); // 이미지 파일 추가
+            formData.append('name', $("#name").val());
+            formData.append('address', $("#address").val());
+            formData.append('phoneNumber', $("#phoneNumber").val());
+            formData.append('dailyPassPrice', $("#dailyPassPrice").val());
+            formData.append('openTime', $("#openTime").val());
+            formData.append('closingTime', $("#closingTime").val());
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data', // multipart/form-data로 설정
+                url: "/centerManage/register",
+                processData: false, // 데이터 처리를 jQuery가 하지 않도록 설정
+                contentType: false, // 서버로 전송되는 데이터 형식을 설정하지 않음
+                cache: false, // 캐시를 사용하지 않도록 설정
+                data: formData, // FormData 객체 전송
+                success: function(response) {
+                    alert("Fitness Center 등록이 완료되었습니다.");
+                    location.href = "/";
+                },
+                error: function(xhr, status, error) {
+                    alert("Fitness Center 등록 중 오류가 발생했습니다.");
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Fitness Center 등록</h2>
+            <div class="input-box">
+                <form enctype="multipart/form-data">
+                    <input type="hidden" id="id" value="1"> <!-- ID 값 hidden input 으로 추가 -->
+                    <div class="form-group">
+                        <label for="name">센터이름:</label> <input type="text"
+                            class="form-control" id="name" placeholder="센터이름을 입력하세요"
+                            name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">주소:</label> <input type="text"
+                            class="form-control" id="address" placeholder="주소를 입력하세요"
+                            name="address">
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">전화번호:</label> <input type="text"
+                            class="form-control" id="phoneNumber" placeholder="전화번호를 입력하세요"
+                            name="phoneNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="dailyPassPrice">일일권 가격:</label> <input type="number"
+                            class="form-control" id="dailyPassPrice"
+                            placeholder="일일권 가격을 입력하세요" name="dailyPassPrice">
+                    </div>
+                    <div class="form-group">
+                        <label for="openTime">오픈시간:</label> <input type="time"
+                            class="form-control" id="openTime" name="openTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="closingTime">마감시간:</label> <input type="time"
+                            class="form-control" id="closingTime" name="closingTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="image">이미지 업로드:</label> <input type="file"
+                            class="form-control" id="image" name="image">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="btnRegister">등록하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

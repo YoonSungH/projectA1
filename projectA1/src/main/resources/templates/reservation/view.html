@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation Details</title>
+</head>
+<body>
+    <h2>예약 정보</h2>
+    <div>
+        <p><strong>Reservation ID:</strong> <span th:text="${reservation.id}"></span></p>
+        <p><strong>Fitness Center:</strong> <span th:text="${reservation.center.name}"></span></p>
+        <p><strong>User:</strong> <span th:text="${reservation.user.name}"></span></p>
+        <p><strong>Reservation Time:</strong> <span th:text="${#dates.format(reservation.reservationTime, 'yyyy-MM-dd HH:mm')}"></span></p>
+    </div>
+    <!-- Add more details here if needed -->
+</body>
+</html>

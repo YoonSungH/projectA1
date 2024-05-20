@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{layouts/layout1}">
+
+<head>
+<meta charset="UTF-8">
+<title>User Information Update</title>
+<link
+   href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+   rel="stylesheet">
+<style>
+body {
+   background-color: #eff1f5;
+}
+
+.container {
+   max-width: 1000px;
+   margin: 40px auto;
+   padding: 20px;
+   background-color: #ffffff;
+   border-radius: 15px;
+   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2.text-center {
+   color: #4e73df;
+   font-weight: bold;
+   margin-bottom: 20px;
+}
+
+.form-group {
+   margin-bottom: 15px;
+}
+
+label {
+   color: #4e73df;
+   font-weight: bold;
+   margin-bottom: 5px;
+   display: block;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="time"], input[type="file"] {
+   width: 100%;
+   padding: 10px;
+   margin-bottom: 10px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   font-size: 16px;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="time"]:focus, input[type="file"]:focus {
+   border-color: #4e73df;
+   box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.btn-primary {
+   background-color: #4e73df;
+   border: none;
+}
+
+.btn-primary:hover {
+   background-color: #375a7f;
+}
+
+.btn-custom {
+   background-color: #4e73df;
+   color: white;
+   border-radius: 4px;
+}
+
+.btn-custom:hover {
+   background-color: #375a7f;
+}
+</style>
+
+<script
+   src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+   src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+   src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+   $(document).ready(function() {
+      $("#btnRegister").click(function() {
+
+    	  if ($("#name").val() == "") {
+       		alert("센터이름을 입력하세요")
+       		$("#name").focus();
+       		return false;
+    		}
+          if ($("#address").val() == "") {
+              alert("주소를 입력하세요")
+              $("#address").focus();
+              return false;
+           }
+          if ($("#phoneNumber").val() == "") {
+              alert("전화번호를 입력하세요")
+              $("#phoneNumber").focus();
+              return false;
+           }
+          if ($("#dailyPassPrice").val() == "") {
+              alert("일일권 가격을 입력하세요")
+              $("#dailyPassPrice").focus();
+              return false;
+           }
+          if ($("#openTime").val() == "") {
+       		alert("오픈시간을 선택하세요")
+       		$("#openTime").focus();
+       		return false;
+    		}
+          if ($("#closingTime").val() == "") {
+       		alert("마감시간을 선택하세요")
+       		$("#closingTime").focus();
+       		return false;
+    		}
+          if (!image) {
+              alert("사진을 첨부하세요");
+              return false;
+          }
+         var formData = new FormData();
+         formData.append('id', $("#id").val());
+         formData.append('image', $('#image')[0].files[0]); // 이미지 파일 추가
+         formData.append('name', $("#name").val());
+         formData.append('address', $("#address").val());
+         formData.append('phoneNumber', $("#phoneNumber").val());
+         formData.append('dailyPassPrice', $("#dailyPassPrice").val());
+         formData.append('openTime', $("#openTime").val());
+         formData.append('closingTime', $("#closingTime").val());
+
+         $.ajax({
+            type : "PUT",
+            enctype : 'multipart/form-data', // multipart/form-data로 설정
+            url : "/centerManage/update",
+            processData : false, // 데이터 처리를 jQuery가 하지 않도록 설정
+            contentType : false, // 서버로 전송되는 데이터 형식을 설정하지 않음
+            cache : false, // 캐시를 사용하지 않도록 설정
+            data : formData, // FormData 객체 전송
+            success : function(response) {
+               alert("Fitness Center 수정이 완료되었습니다.");
+               location.href = "/owner/ownerpage";
+            },
+            error : function(xhr, status, error) {
+               alert("Fitness Center 수정 중 오류가 발생했습니다.");
+               console.error(xhr.responseText);
+            }
+         });
+      });
+   });
+</script>
+
+</head>
+
+<body>
+   <div layout:fragment="content">
+      <div class="container mt-5">
+         <h2 class="text-center mb-4">Fitness Center 수정</h2>
+         <div class="input-box">
+            <form enctype="multipart/form-data">
+               <input type="hidden" id="id" th:value="${center.id}">
+               <!-- ID 값 hidden input 으로 추가 -->
+               <div class="form-group">
+                  <label for="name">센터이름:</label> <input type="text"
+                     class="form-control" id="name" th:value="${center.name}"
+                     placeholder="센터이름을 입력하세요" name="name">
+               </div>
+               <div class="form-group">
+                  <label for="address">주소:</label> <input type="text"
+                     class="form-control" id="address" th:value="${center.address}"
+                     placeholder="주소를 입력하세요" name="address">
+               </div>
+               <div class="form-group">
+                  <label for="phoneNumber">전화번호:</label> <input type="text"
+                     class="form-control" id="phoneNumber"
+                     th:value="${center.phoneNumber}" placeholder="전화번호를 입력하세요"
+                     name="phoneNumber">
+               </div>
+               <div class="form-group">
+                  <label for="dailyPassPrice">일일권 가격:</label> <input type="number"
+                     class="form-control" th:value="${center.dailyPassPrice}"
+                     id="dailyPassPrice" placeholder="일일권 가격을 입력하세요"
+                     name="dailyPassPrice">
+               </div>
+               <div class="form-group">
+                  <label for="openTime">오픈시간:</label> <input type="time"
+                     class="form-control" id="openTime" name="openTime" th:value="${center.openTime}">
+               </div>
+               <div class="form-group">
+                  <label for="closingTime">마감시간:</label> <input type="time"
+                     class="form-control" id="closingTime" name="closingTime" th:value="${center.closingTime}">
+               </div>
+               <div class="form-group">
+                  <label for="image">이미지 업로드:</label> <input type="file"
+                     class="form-control" id="image" th:value="${center.imagePath}"
+                     name="image">
+               </div>
+               <button type="button" class="btn btn-primary" id="btnRegister">등록하기</button>
+               <button type="button" class="btn btn-custom">
+                  <a th:href="@{/owner/ownerpage}"
+                     style="text-decoration: none; color: white;">돌아가기</a>
+               </button>
+            </form>
+         </div>
+      </div>
+   </div>
+
+</body>
+
+</html>

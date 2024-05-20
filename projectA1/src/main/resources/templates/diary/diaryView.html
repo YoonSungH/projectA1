@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <title>체육관 예약 시스템</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --text-color: #212529;
+            --header-bg-color: #eaeaea;
+            --footer-bg-color: #eaeaea;
+            --button-bg-color: var(--secondary-color);
+            --button-hover-bg-color: #5a6268;
+            --star-color: #d2d2d2;
+            --star-filled-color: #f5d042;
+            --label-font-size: 20px; /* 라벨 글꼴 크기 조정 */
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .gym-view {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .gym-header {
+            background-color: var(--header-bg-color);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+        }
+        .gym-body {
+            padding: 20px;
+        }
+        .gym-body label {
+            color: var(--text-color);
+            font-size: var(--label-font-size);
+            font-weight: bold; /* 라벨을 더 눈에 띄게 하기 위해 */
+            margin: 10px 0 5px; /* 위아래 여백 조정 */
+            display: block;
+        }
+        .gym-body .info {
+            margin-bottom: 15px;
+        }
+        .gym-footer {
+            padding: 20px;
+            background-color: var(--footer-bg-color);
+            text-align: center;
+        }
+        .gym-view button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--button-bg-color);
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .gym-view button:hover {
+            background-color: var(--button-hover-bg-color);
+        }
+        .info-value {
+            font-size: 18px;
+            color: var(--text-color);
+            padding-left: 10px; /* 추가된 값들의 패딩 */
+        }
+        @media (max-width: 768px) {
+            .gym-view {
+                margin: 10px;
+                padding: 10px;
+            }
+            .gym-view h1, .gym-body label, .gym-body .info span, .gym-view button {
+                font-size: 90%;
+            }
+        }
+        .btn.button-standard {
+    padding: 4px 16px; /* 패딩을 줄여서 버튼 크기를 작게 조정 */
+    font-size: 16px; /* 폰트 크기를 줄임 */
+    min-width: 80px; /* 버튼의 최소 너비를 조정 */
+    box-sizing: border-box; /* 패딩을 너비 계산에 포함 */
+    border-radius: 4px; /* 필요한 경우, 버튼의 모서리 둥글기를 조정 */
+}
+
+/* 기존에 적용된 다른 btn 클래스 스타일의 영향을 최소화 */
+.btn-secondary.button-standard {
+    background-color: var(--button-bg-color); /* 돌아가기 버튼 배경색 */
+    color: white; /* 돌아가기 버튼 텍스트 색상 */
+}
+
+        
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="gym-view">
+            <div class="gym-header">
+                <h1>다이어리 상세보기</h1>
+            </div>
+            <div class="gym-body">
+                <div class="info">
+                    <label>제목:</label>
+                    <div class="info-value" th:text="${diary.title}">오늘의 운동일지</div>
+                </div>
+                <div class="info">
+                    <label>날짜:</label>
+                    <div class="info-value" th:text="${#dates.format(diary.date, 'yyyy-MM-dd')}">2017-12-19</div>
+                </div>
+                <div class="info">
+                    <label>내용:</label>
+                    <div class="info-value" th:text="${diary.content}" style="white-space: pre-wrap;">이곳은 게시물의 내용이 표시되는 부분입니다.</div>
+                </div>
+            </div>
+           <!-- 이 아래로 네 줄 수정했어요 -->
+           <div class="gym-footer">
+    <button type="button" onclick="history.go(-1)" class="btn btn-secondary button-standard">돌아가기</button>
+    <a th:href="@{/diary/diaryEdit/{id}(id=${diary.id})}" class="btn btn-primary button-standard">수정하기</a>
+    <a th:href="@{/diary/diaryDelete/{id}(id=${diary.id})}" class="btn btn-danger button-standard">삭제하기</a>
+</div>
+
+
+        </div>
+    </div>
+</body>
+</html>

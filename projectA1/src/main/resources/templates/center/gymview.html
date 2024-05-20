@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+<head>
+<title>체육관 예약 시스템</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+body {
+	background-color: #eff1f5;
+}
+
+.gym-view {
+	max-width: 1000px;
+	margin: 40px auto;
+	padding: 20px;
+	background-color: #ffffff;
+	border-radius: 15px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.gym-header, .gym-footer {
+	background-color: #f8f9fa;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.gym-view h1, .review-section h2, .comment-section h2 {
+	color: #4e73df; /* 파란색 */
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.gym-body .info span, textarea {
+	color: #333; /* 검은색 */
+	font-size: 18px;
+}
+
+.gym-body label {
+	color: #4e73df; /* 파란색 */
+	font-weight: bold;
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+
+input[type="text"], textarea, input[type="number"] {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	color: #333;
+	font-size: 16px;
+}
+
+input[type="text"]:focus, textarea:focus, input[type="number"]:focus {
+	border-color: #4e73df; /* 파란색 */
+	box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.gym-view button, .review-section button {
+	width: auto;
+	padding: 10px 15px;
+	margin: 3px;
+	border: none;
+	border-radius: 5px;
+	color: #ffffff;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.gym-footer button {
+	opacity: 1;
+}
+
+.gym-footer button#back {
+	background-color: #6c757d; /* 회색 */
+}
+
+.gym-footer button#back:hover {
+	background-color: #5a6268; /* 호버 시 진한 회색 */
+}
+
+.gym-footer button#reviewInsert {
+	display: inline-block; /* 버튼을 보이도록 설정 */
+	background-color: #4e73df; /* 파란색 */
+	color: #ffffff; /* 글자색 변경 */
+	border: none; /* 테두리 없애기 */
+	padding: 10px 20px; /* 내부 여백 설정 */
+	border-radius: 5px; /* 버튼 모서리 둥글게 만들기 */
+	cursor: pointer; /* 커서 모양 변경 */
+	transition: background-color 0.2s; /* 배경색 변경 트랜지션 설정 */
+}
+
+.gym-footer button#reviewInsert:hover {
+	background-color: #375a7f; /* 호버 시 진한 파란색 */
+}
+
+/* 예약하기 버튼 색상 변경 */
+#reserveButton {
+	background-color: #28a745; /* 녹색 */
+}
+
+#reserveButton:hover {
+	background-color: #218838; /* 호버 시 진한 녹색 */
+}
+</style>
+
+<script>
+	$(document).ready(
+			function() {
+				// 예약 버튼 클릭 시 동작
+				$("#reserveButton").click(function() {
+					if (confirm("예약하시겠습니까?")) {
+						var centerId = $("#fitnessCenterId").val();
+
+						// 예약 생성을 위한 AJAX 요청
+						$.ajax({
+							type : "POST",
+							url : "/reservation/create",
+							data : {
+								centerId : centerId
+							},
+							success : function(resp, status) {
+								alert("예약에 성공하였습니다.");
+								window.location.href = "/user/mypage";
+							},
+							error : function(e) {
+								alert("예약 실패 : " + e);
+							}
+						});
+					} else {
+						alert("예약이 취소되었습니다.");
+					}
+				});
+
+				// 리뷰 등록 버튼 클릭 시 동작
+				$("#reviewInsert").click(
+						function() {
+							var rating = $("#rating").val();
+							var reviewText = $("#review_text").val();
+							var centerId = $("#fitnessCenterId").val();
+							var userId = $("#userId").val(); // 사용자 ID 가져오기
+
+							// 필수 입력 값 체크
+							if (!rating || !reviewText) {
+								alert("평점과 리뷰를 모두 작성해주세요.");
+								return;
+							}
+
+							// 리뷰 데이터 객체 생성
+							var reviewData = {
+								rating : parseInt(rating),
+								reviewText : reviewText,
+								centerId : centerId,
+								userId : userId
+							};
+
+							// AJAX 요청
+							$.ajax({
+								type : "POST",
+								url : "/review/add",
+								data : JSON.stringify(reviewData),
+								contentType : "application/json;charset=utf-8",
+								success : function(response) {
+									if (response === "success") {
+										alert("리뷰가 등록되었습니다.");
+										//loadAllReviews();
+										location.reload();
+
+									} else {
+										alert("리뷰 등록 실패: " + response);
+									}
+								},
+								error : function(error) {
+									console.error("리뷰 등록 실패:", error.status,
+											error.statusText,
+											error.responseText);
+									alert("리뷰 등록 실패: " + error.responseText);
+								}
+							});
+						});
+
+				// 뒤로 가기 버튼 클릭 시 동작
+				$("#back").click(function() {
+					window.location.href = "/centerManage/gymlist";
+				});
+
+				// 댓글 삭제 코드
+				$(".delete-btn").click(function(e) {
+				    e.preventDefault(); // 기본 동작 방지 (페이지 이동)
+
+				    var reviewId = $(this).data("review-id");
+
+				    // 확인 메시지 표시
+				    if (confirm("정말 삭제하시겠습니까?")) {
+				        $.ajax({
+				            type: "GET",
+				            url: "/review/delete/" + reviewId,
+				            success: function(response) {
+				                if (response === "success") {
+				                	alert("댓글 삭제 성공!!!")
+				                    location.reload();
+				                } else {
+				                    // 실패한 경우에 대한 처리를 여기에 추가할 수 있습니다.
+				                    console.error("댓글 삭제 실패");
+				                }
+				            },
+				            error: function(xhr, status, error) {
+				                // 에러가 발생한 경우에 대한 처리를 여기에 추가할 수 있습니다.
+				                console.error("댓글 삭제 요청 실패: " + error);
+				            }
+				        });
+				    }
+				});
+
+				
+				
+				
+			});
+</script>
+
+
+</head>
+<body>
+	<div layout:fragment="content" class="gym-view">
+		<div class="gym-header">
+			<h1
+				th:text="${fitnessCenter.name + ' 센터 정보' + ' / (평점 : ' + #numbers.formatDecimal(avg, 1,1) + '점)'}">센터
+				정보</h1>
+		</div>
+
+		<input type="hidden" id="fitnessCenterId"
+			th:value="${fitnessCenter.id}"> <input type="hidden"
+			id="userId" th:value="${authentication.principal.userId}">
+
+		<div class="gym-body">
+			<div>
+				<!-- Thymeleaf의 th:src 속성에 모델에서 가져온 이미지 경로를 삽입하여 이미지를 표시 -->
+				<img th:src="${'/img/' + fitnessCenter.imagePath}"
+					alt="Center Image" width="100" height="100">
+			</div>
+			<div class="info">
+				<label>센터 명 :</label> <span th:text="${fitnessCenter.name}">휘트니스
+					센터</span>
+			</div>
+			<div class="info">
+				<label>전화번호 :</label> <span th:text="${fitnessCenter.phoneNumber}">010-0000-0000</span>
+			</div>
+			<div class="info">
+				<label>일일권 가격 :</label> <span
+					th:text="${fitnessCenter.dailyPassPrice + '원'}">20,000원</span>
+			</div>
+			<div class="info">
+				<label>센터 위치 :</label> <span th:text="${fitnessCenter.address}">서울특별시
+					강남구 역삼동</span>
+			</div>
+			<div class="info">
+				<label>운영시간 :</label> <span th:text="${fitnessCenter.openTime}"></span>
+				~ <span th:text="${fitnessCenter.closingTime}"></span>
+			</div>
+		</div>
+
+		<div class="gym-footer">
+			<!-- '돌아가기' 버튼은 'gymlist.html'로 이동합니다. -->
+			<button id="back" name="back" class="return-button">돌아가기</button>
+			<!-- '예약하기' 버튼에는 클릭 이벤트를 처리하는 JavaScript 코드가 필요합니다. -->
+			<button id="reserveButton" name="reserveButton"
+				class="reserve-button">예약하기</button>
+		</div>
+
+		<hr />
+
+		<form action="/review/add" method="post">
+			<!-- 리뷰 칸 -->
+			<div class="review-section">
+				<h2>후기 작성(평점 1~5점)</h2>
+				<label>평점 :</label> <input type="number" id="rating" name="rating"
+					min="1" max="5" required />
+				<div class="star-rating">
+					<div class="filled"></div>
+				</div>
+				<label>댓글 :</label>
+				<textarea id="review_text" name="reviewText" rows="4" cols="40"
+					placeholder="리뷰를 작성하세요." required></textarea>
+				<button type="button" id="reviewInsert"
+					style="background-color: blue;">등록</button>
+
+			</div>
+		</form>
+
+		<hr />
+
+		<!--         댓글 확인
+        <div class="comment-section">
+            <h2>후기 확인</h2>
+            <ul id="commentList">
+                댓글 목록
+                <li th:each="review : ${reviews}">
+                    <p>
+                        <span th:text="${review.user.name}"></span>님 >> <span th:text="${review.reviewText}"></span> / 평점 : <span th:text="${review.rating}"></span>
+                    </p>
+                </li>
+            </ul>
+        </div> -->
+
+		<!-- 댓글 확인 -->
+		<div class="comment-section">
+			<h2>후기 확인</h2>
+			<ul id="commentList">
+				<!-- 댓글 목록 -->
+				<li th:each="review : ${reviews}">
+					<p>
+						<span th:text="${review.user.name}"></span>님 >> <span
+							th:text="${review.reviewText}"></span> / 평점 : <span
+							th:text="${review.rating}"></span>
+
+						<!-- 						삭제 버튼
+						<span th:if="${authentication.principal.userId == review.user.id}">
+							<a href="#" th:href="@{'/delete/comment/' + ${review.id}}">삭제</a>
+						</span> -->
+						<!-- 삭제 버튼 -->
+						<span th:if="${authentication.principal.userId == review.user.id}">
+							<a href="#" class="delete-btn"
+							th:attr="data-review-id=${review.id}">삭제</a>
+						</span>
+					</p>
+				</li>
+			</ul>
+		</div>
+
+
+		<!-- 페이징 처리 -->
+		<div class="pagination">
+			<ul class="pagination">
+				<!-- 이전 -->
+				<li th:if="${currentPage > 0}"><a class="page-link"
+					th:href="@{'/centerManage/view/' + ${id} + '?page=' + (${currentPage - 1}) + '&amp;size=' + ${size}}">Previous</a>
+				</li>
+
+				<!-- 페이지 번호 -->
+				<th:block th:if="${totalPages > 0}">
+					<th:block
+						th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
+						<li
+							th:class="${pageNum == currentPage ? 'page-item active' : 'page-item'}">
+							<a class="page-link"
+							th:href="@{'/centerManage/view/' + ${id} + '?page=' + ${pageNum} + '&amp;size=' + ${size}}"><span
+								th:text="${pageNum + 1}">1</span></a>
+						</li>
+					</th:block>
+				</th:block>
+
+				<!-- 다음 -->
+				<li th:if="${currentPage < totalPages - 1}"><a
+					class="page-link"
+					th:href="@{'/centerManage/view/' + ${id} + '?page=' + (${currentPage + 1}) + '&amp;size=' + ${size}}">Next</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+
+</html>

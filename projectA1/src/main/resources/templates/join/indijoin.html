@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<head>
+<title>회원가입</title>
+<!-- jQuery 스크립트 명시적으로 추가 -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script th:inline="javascript">
+	// 현재 날짜가져옴
+	function getCurrentDate() {
+		var currentDate = new Date();
+		return currentDate.toISOString(); // ISO 형식으로 변환하여 반환
+	}
+
+	$(document).ready(function() {
+
+		$("#btnJoin").click(function() {
+			// 유효성 검사 코드는 여기에 유지
+			if ($("#name").val() == "") {
+				alert("이름을 입력하세요")
+				$("#name").focus();
+				return false;
+			}
+			if ($("#email").val() == "") {
+				alert("이메일(아이디)을 입력하세요")
+				$("#email").focus();
+				return false;
+			}
+			if ($("#password").val() == "") {
+				alert("비밀번호를 입력하세요")
+				$("#password").focus();
+				return false;
+			}
+			if ($("#pass_check").val() == "") {
+				alert("비밀번호를 확인하세요")
+				$("#pass_check").focus();
+				return false;
+			}
+			if ($("#password").val() != $("#pass_check").val()) {
+				alert("비밀번호가 일치하지 않습니다.")
+				$("#pass_check").focus();
+				return false;
+			}
+			if ($("#address").val() == "") {
+				alert("주소를 입력하세요")
+				$("#address").focus();
+				return false;
+			}
+			if ($("#phoneNumber").val() == "") {
+				alert("전화번호를 입력하세요")
+				$("#phoneNumber").focus();
+				return false;
+			}
+			if (!$("input[name='gender']:checked").val()) {
+				alert("성별을 선택하세요");
+				return false;
+			}
+			if ($("#birthDate").val() == "") {
+				alert("생년월일을 입력하세요")
+				$("#birthDate").focus();
+				return false;
+			}
+			var data = { // 세미콜론(;) 대신 콤마(,) 사용
+				name : $("#name").val(),
+				email : $("#email").val(),
+				password : $("#password").val(),
+				phoneNumber : $("#phoneNumber").val(),
+				gender : $("input[name='gender']:checked").val(), // 성별 데이터를 제대로 가져오기 위한 수정
+				address : $("#address").val(),
+				joinDate : getCurrentDate(), // joinDate 값을 자동으로 설정
+				birthDate : $("#birthDate").val(),
+			};
+			$.ajax({
+				type : "POST",
+				url : "/user/join",
+				contentType : "application/json;charset=utf-8",
+				data : JSON.stringify(data),
+				success : function(resp) {
+					if (resp === "success") {
+						alert("회원가입을 축하합니다.");
+						location.href = "/login/loginPage";
+					} else if (resp === "fail") {
+						alert("중복된 아이디입니다. 수정하세요.")
+                        // 회원가입 실패 시 필요한 처리 추가
+                    }
+				},
+	              error : function(e) {
+	                    console.error("회원가입 실패:", e);
+	                    alert("회원가입에 실패하였습니다. 다시 시도해주세요.");
+	                    $("#id").val("")
+	                    // 필요한 예외 처리 추가
+	                }
+			});
+
+		});
+	});
+</script>
+
+<style>
+/* 회색 테두리로 감싼 스타일 */
+.input-box {
+	border: 1px solid #ced4da;
+	padding: 15px;
+	border-radius: 5px;
+	margin-bottom: 15px;
+}
+
+/* 성별 선택을 둘러싼 테두리 스타일 */
+.gender-selection {
+	border: 1px solid #ced4da;
+	padding: 15px;
+	border-radius: 5px;
+	margin-bottom: 15px;
+}
+
+/* 회색 버튼으로 스타일 변경 */
+.btn-primary {
+	background-color: #6c757d !important;
+	border-color: #6c757d !important;
+	width: 100%;
+	/* 전체 테두리에 맞게 늘리기 */
+	margin-top: 15px;
+	/* 여백 추가 */
+}
+</style>
+</head>
+
+<body>
+	<div layout:fragment="content" class="container mt-5">
+		<h2 class="text-center mb-4">개인 회원 가입</h2>
+		<form th:action="@{/user/join}" method="post">
+			<div class="input-box">
+				<div class="form-group">
+					<label for="name">이름:</label> <input type="text"
+						class="form-control" id="name" placeholder="이름을 입력하세요" name="name">
+				</div>
+				<div class="form-group">
+					<label for="email">이메일(ID):</label> <input type="text"
+						class="form-control" id="email" placeholder="이메일(ID)을 입력하세요"
+						name="email">
+				</div>
+				<div class="form-group">
+					<label for="password">비밀번호:</label> <input type="password"
+						class="form-control" id="password" placeholder="비밀번호를 입력하세요"
+						name="password">
+				</div>
+				<div class="form-group">
+					<label for="pass_check">비밀번호 확인:</label> <input type="password"
+						class="form-control" id="pass_check" placeholder="비밀번호를 다시 입력하세요"
+						name="pass_check">
+				</div>
+				<div class="form-group">
+					<label for="address">주소:</label> <input type="text"
+						class="form-control" id="address" placeholder="주소를 입력하세요"
+						name="address">
+				</div>
+				<div class="form-group">
+					<label for="phoneNumber">전화번호:</label> <input type="text"
+						class="form-control" id="phoneNumber" placeholder="전화번호를 입력하세요"
+						name="phoneNumber">
+				</div>
+				<div class="form-group">
+					<label>성별:</label>
+					<div class="gender-selection">
+						<label class="gender-label" for="male"> <input
+							class="gender-input" type="radio" name="gender" id="male"
+							value="male"> 남자
+						</label> <label class="gender-label" for="female"> <input
+							class="gender-input" type="radio" name="gender" id="female"
+							value="female"> 여자
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="birthDate">생년월일:</label> <input type="date"
+						class="form-control" id="birthDate" name="birthDate">
+				</div>
+			</div>
+			<button type="button" class="btn btn-primary" id="btnJoin">가입하기</button>
+		</form>
+	</div>
+</body>
+
+</html>

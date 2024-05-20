@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <title>New Diary Entry</title>
+    <style>
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ccc;
+            color: #333;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #bbb;
+        }
+    </style>
+
+</head>
+<body id="page-top">
+<!-- user_id 없음  -->
+
+<div class="centered-container">
+    <div class="form-container" layout:fragment="content">
+        <h2>새 다이어리 쓰기</h2>
+        <form th:action="@{/diary/addDiary}" method="post">
+        <div class="form-group">
+            <label for="title">제목 :</label>
+            <input type="text" id="title" name="title" th:value="*{title}" required />
+        </div>
+        <div class="form-group">
+            <label for="date">날짜 :</label>
+            <!-- Thymeleaf를 사용하여 서버에서 오늘 날짜를 가져와서 적용 -->
+            <input type="date" id="date" name="date" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required />
+        </div>
+        <div class="form-group">
+            <label for="content">내용 :</label>
+            <textarea id="content" name="content" th:text="*{content}" required></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn">작성완료</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>

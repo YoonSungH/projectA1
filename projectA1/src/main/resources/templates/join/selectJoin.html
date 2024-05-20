@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 유형 선택</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .btn-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 60px;
+            margin: 10px;
+            font-size: 24px;
+            text-align: center;
+            width: 300px;
+            height: 200px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            white-space: nowrap;
+        }
+
+        @media screen and (max-width: 768px) {
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-icon {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+ <div layout:fragment="content">
+
+<!-- Content here -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">회원 유형을 선택하세요</h5>
+                    <div class="btn-container">
+                        <a th:href="@{/join/indiJoin}" class="btn btn-secondary btn-icon btn-lg">
+                            <i class="fas fa-user fa-5x"></i>
+                            <span>개인회원</span>
+                        </a>
+                        <a th:href="@{/join/ownerJoin}" class="btn btn-secondary btn-icon btn-lg">
+                            <i class="fas fa-building fa-5x"></i>
+                            <span>기업회원</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+</body>
+
+</html>

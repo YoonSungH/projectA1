@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>앨범 예시</title>
+	<!-- Bootstrap CSS -->
+	<link href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- 이 템플릿을 위한 사용자 정의 스타일 -->
+	<link href="styles.css" rel="stylesheet">
+	<style>
+		ul .nav-item {
+			margin-left: 5px;
+			margin-right: 5px;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<header th:fragment="header">
+		<div class="navbar navbar-dark bg-dark shadow-sm">
+			<div class="container-fluid">
+				<div class="d-flex justify-content-between w-100">
+					<!-- 로고를 클릭하면 홈페이지로 이동 -->
+					<a href="/" class="navbar-brand d-flex align-items-center"> <strong>Fit-PassPlater</strong>
+					</a>
+					<!-- 메뉴 항목들 -->
+
+					
+<div>
+<ul class="navbar-nav mb-2 mb-lg-0 d-flex flex-row" id="userNav">
+
+    <!-- 환영 메시지 -->
+    <li th:if="${authentication != null and authentication.name != 'anonymousUser'}" class="nav-item">
+        <span class="nav-link" style="color: white; padding-left: 10px; padding-right: 10px;">
+            환영합니다, <span th:text="${authentication.name}"></span>님!
+        </span>
+    </li>
+    
+    <!-- 로그인 -->
+    <li th:unless="${authentication != null and authentication.name != 'anonymousUser'}" class="nav-item">
+        <a class="nav-link" th:href="@{/login/loginPage}" style="color: white; padding-left: 10px; padding-right: 10px;">로그인</a>
+    </li>
+    
+    <!-- 로그아웃 -->
+    <li th:if="${authentication != null and authentication.name != 'anonymousUser'}" class="nav-item">
+        <a class="nav-link" th:href="@{/logout}" style="color: white; padding-left: 10px; padding-right: 10px;">로그아웃</a>
+    </li>
+
+    <!-- ROLE_USER -->
+    <li th:if="${roles.contains('ROLE_USER')}" class="nav-item">
+        <a class="nav-link" th:href="@{/user/mypage}" style="color: white; padding-left: 10px; padding-right: 10px;">유저 페이지</a>
+    </li>
+    <li th:if="${roles.contains('ROLE_USER')}" class="nav-item">
+        <a class="nav-link" th:href="@{/centerManage/gymlist}" style="color: white; padding-left: 10px; padding-right: 10px;">일일권 예약</a>
+    </li>
+    <!-- ROLE_OWNER -->
+    <li th:if="${roles.contains('ROLE_OWNER')}" class="nav-item">
+        <a class="nav-link" th:href="@{/owner/ownerpage}" style="color: white; padding-left: 10px; padding-right: 10px;">사장님 페이지</a>
+    </li>
+    
+    <!-- 게시판 -->
+    <li class="nav-item">
+        <a class="nav-link" th:href="@{/board/list}" style="color: white; padding-left: 10px; padding-right: 10px;">게시판</a>
+    </li>
+</ul>
+
+</div>
+
+
+
+
+
+
+				</div>
+			</div>
+	</header>
+
+	<!-- 여기에 콘텐츠가 들어갑니다 -->
+
+
+	<!-- Bootstrap JS 및 의존성 -->
+	<script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

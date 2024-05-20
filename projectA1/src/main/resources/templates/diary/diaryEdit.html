@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <title>New Diary Entry</title>
+    <style>
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ccc;
+            color: #333;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #bbb;
+        }
+        .gym-footer {
+    display: flex;
+    justify-content: space-between; /* 버튼 사이에 공간을 균등하게 분배 */
+    padding: 20px;
+}
+
+.btn {
+    flex-grow: 1; /* 버튼이 가능한 공간을 균등하게 차지하도록 함 */
+    margin: 0 10px; /* 버튼 사이의 간격 조정 */
+}
+
+.gym-footer {
+    display: flex;
+    justify-content: center; /* 버튼들을 중앙에 위치시킵니다. */
+    padding: 20px;
+}
+
+.btn {
+    margin: 0 10px; /* 버튼 사이의 간격 유지 */
+    width: auto; /* 버튼의 너비를 자동으로 조정 */
+    padding: 10px 20px; /* 내부 패딩을 통해 버튼 크기 조절 */
+}
+
+/* 버튼에 적용되는 고정 너비를 제거하거나 조정합니다. */
+.gym-footer button {
+    flex: 0 1 auto; /* 버튼이 자신의 내용에 맞게 크기를 조절하도록 설정 */
+}
+.gym-view {
+    width: 100%;
+    max-width: 1000px; /* 전체 가로 길이를 증가 */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid black; /* 검은색 테두리의 굵기를 줄임 */
+}
+
+.btn-primary {
+    background-color: #007bff; /* 연한 파란색으로 이미 변경했다고 가정 */
+    border-color: #007bff;
+    color: #ffffff; /* 버튼의 글자 색상을 하얀색으로 변경 */
+}
+
+.btn-primary:hover {
+    background-color: #0069d9; /* 호버 시의 배경색 */
+    border-color: #0062cc;
+    color: #ffffff; /* 호버 시에도 글자 색상을 하얀색으로 유지 */
+}
+
+        
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="gym-view">
+            <div class="gym-header">
+                <h1>다이어리 수정하기</h1>
+            </div>
+<form th:action="@{'/diary/updateDiary/' + ${diary.id}}" th:object="${diary}" method="post">                <div class="gym-body">
+                    <div class="info">
+                        <label for="title">제목:</label>
+                        <input type="text" id="title" name="title" th:field="*{title}" class="form-control" required/>
+                    </div>
+                    <div class="info">
+                        <label for="date">날짜:</label>
+                        <input type="date" id="date" name="date" th:field="*{date}" class="form-control" required/> <!-- 변경된 부분 -->
+                    </div>
+                    <div class="info">
+                        <label for="content">내용:</label>
+                        <textarea id="content" name="content" th:field="*{content}" class="form-control" required></textarea>
+                    </div>
+                </div>
+                <div class="gym-footer">
+                    <button type="submit" class="btn btn-primary">수정 완료</button>
+                    <button type="button" onclick="history.go(-1)" class="btn btn-secondary">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

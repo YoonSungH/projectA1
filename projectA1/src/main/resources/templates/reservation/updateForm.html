@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>예약 변경</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+	<div>
+		<p>
+			현재 예약 시간: <span id="currentReservationTime"
+				th:text="${reservation.reservationTime}"></span>
+		</p>
+		<label for="newReservationTime">새로운 예약 시간:</label> <input
+			type="datetime-local" id="newReservationTime"
+			name="newReservationTime">
+		<button id="changeReservationBtn">예약 변경</button>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			$('#changeReservationBtn').click(function() {
+				var newReservationTimeStr = $('#newReservationTime').val(); // 예약 시간 문자열
+				var newReservationTime = new Date(newReservationTimeStr); // JavaScript Date 객체로 변환
+
+				// Ajax를 사용하여 서버에 요청을 보냅니다.
+				$.ajax({
+					type : 'PUT',
+					url : '/reservation/update/' + reservationId,
+					contentType : 'application/json',
+					data : JSON.stringify({
+						"newReservationTime" : newReservationTime.toISOString()
+					// ISO 8601 형식으로 변환하여 전송
+					}),
+					success : function(response) {
+						if (response == "success") {
+							alert('예약이 성공적으로 변경되었습니다.');
+							window.location.replace("/user/mypage");
+						}
+						// 페이지 새로고침 또는 필요한 작업 수행
+					},
+					error : function(xhr, status, error) {
+						alert('예약 변경 중 오류가 발생했습니다.');
+						console.error(xhr.responseText);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

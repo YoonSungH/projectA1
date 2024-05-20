@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<head>
+    <title>회원가입</title>
+    <!-- jQuery 스크립트를 명시적으로 추가합니다 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- 사용자 스크립트를 별도의 스크립트 태그로 이동합니다 -->
+    <script th:inline="javascript">
+        // 현재 날짜를 가져와서 yyyy-MM-dd 형식의 문자열로 변환하는 함수
+        function getCurrentDate() {
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줌
+            const day = String(currentDate.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        $(document).ready(function () {
+            $("#btnJoin").click(function () {
+                // 유효성 검사 코드는 여기에 그대로 남겨둡니다
+
+                data = {
+                    name: $("#name").val(),
+                    email : $("#email").val(),
+                    password: $("#password").val(),
+                    phoneNumber: $("#phoneNumber").val(),
+                    gender: $("#gender").val(),
+                    address: $("#address").val(),
+                    joinDate: getCurrentDate(),
+                    birthDate : $("#birthDay").val(),
+                }
+                $.ajax({
+                    type: "post",
+                    url: "/user/join",
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(data)
+                })
+                .done(function (resp) {
+                    if (resp == "success") {
+                        alert("회원가입을 축하합니다.")
+                        $("#idcheck").html("")
+                        location.href = "/user/indilogin"
+                    } else if (resp == "fail") {
+                        $("#idcheck").html("<b>아이디 중복확인 하세요</b>")
+                        $("#id").val("")
+                    }
+                })
+                .fail(function (e) {
+                    alert("회원가입 실패")
+                })
+            })
+        })
+    </script>
+
+    <!-- 사용자 스타일을 별도의 스타일 태그로 이동합니다 -->
+    <style>
+        /* 회색 테두리로 감싸는 스타일 */
+        .input-box {
+            border: 1px solid #ced4da;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* 성별 선택을 감싸는 테두리 스타일 */
+        .gender-selection {
+            border: 1px solid #ced4da;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* 회색 버튼으로 스타일 변경 */
+        .btn-primary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            width: 100%; /* 전체 테두리에 맞게 늘리기 */
+            margin-top: 15px; /* 간격 추가 */
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content" class="container mt-5">
+     <h2 class="text-center mb-4">개인회원 가입</h2>
+        <form th:action="@{/user/join}" method="post">
+            <!-- 회색 테두리로 감싸기 -->
+            <div class="input-box">
+                <div class="form-group">
+                    <label for="name">이름:</label>
+                    <input type="text" class="form-control" id="name" placeholder="이름을 입력하세요" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="email">이메일(아이디):</label>
+                    <input type="text" class="form-control" id="email" placeholder="이메일(아이디)를 입력하세요"
+                        name="email">
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호:</label>
+                    <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력하세요"
+                        name="password">
+                </div>
+                <div class="form-group">
+                    <label for="pass_check">비밀번호 확인:</label>
+                    <input type="password" class="form-control" id="pass_check" placeholder="비밀번호를 다시 입력하세요"
+                        name="pass_check">
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">전화번호:</label>
+                    <input type="text" class="form-control" id="phoneNumber" placeholder="전화번호를 입력하세요"
+                        name="phoneNumber">
+                </div>
+            <div class="form-group">
+                        <label>성별:</label>
+                        <div class="gender-selection">
+                            <label class="gender-label" for="male">
+                                <input class="gender-input" type="radio" name="gender" id="male" value="male">
+                                남성
+                            </label>
+                            <label class="gender-label" for="female">
+                                <input class="gender-input" type="radio" name="gender" id="female" value="female">
+                                여성
+                            </label>
+                        </div>
+                    </div>
+            <div class="form-group">
+                <label for="birthDate">생년월일:</label>
+                <input type="date" class="form-control" id="birthDate" name="birthDate">
+            </div>
+            <div class="form-group">
+                <label for="joinDate">가입일자:</label>
+                <input type="date" class="form-control" id="joinDate" name="joinDate">
+            </div>
+          </div> 
+            <button type="button" class="btn btn-primary" id="btnJoin">회원가입</button>
+          
+        </form>
+    </div>
+</body>
+
+</html>

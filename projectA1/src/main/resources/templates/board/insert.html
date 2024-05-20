@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>다이어리 작성 페이지</title>
+    <!-- 여기에 Bootstrap 또는 다른 CSS 프레임워크 링크를 포함하세요 -->
+    <style>
+        body {
+            background-color: #eff1f5;
+        }
+
+        form {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2653d4;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+
+        label {
+            font-weight: bold;
+            color: #4e73df;
+            margin-bottom: 10px;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+
+        .form-group {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .btn-primary, .btn-back {
+    padding: 10px 15px; /* 패딩 조정으로 버튼 크기 동일하게 설정 */
+    font-size: 16px; /* 글꼴 크기 동일하게 설정 */
+    border-radius: 5px; /* 테두리 둥글기 동일하게 설정 */
+    text-decoration: none; /* 텍스트 꾸밈 제거 */
+    display: inline-block; /* 버튼을 인라인 블록 요소로 설정 */
+    margin: 3px; /* 주변 요소와의 간격 */
+    width: auto; /* 자동 너비 설정 */
+}
+        
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <form action="insert" method="post">
+            <div class="form-group">
+                <label for="title">제목 :</label>
+                <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요" name="title">
+            </div>
+            <div class="form-group">
+                <label for="writer">글쓴이:</label>
+                <input type="text" class="form-control" id="writer" name="writer" th:value="${authentication.name}" readonly="readonly">
+            </div>
+            <div class="form-group">
+                <label for="content">내용 :</label>
+                <textarea class="form-control" rows="5" id="content" name="content"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary m-3">작성완료</button>
+            <a href="javascript:history.back()" class="btn-back">돌아가기</a>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 수정 페이지</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="gym-view">
+        <div class="gym-header">
+            <h1>게시판 수정하기</h1>
+        </div>
+        <form id="boardForm" method="POST" th:action="'/board/update/' + ${board.num}" th:object = "${board}">
+            <div class="gym-body">
+<input type="hidden" id="num" name="num" th:value="${board.num}" />
+
+                <div class="info">
+                    <label for="title">제목:</label>
+                    <input type="text" id="title" name="title" th:value="${board.title}" class="form-control" required />
+                </div>
+                <div class="info">
+                    <label for="content">내용:</label>
+                    <textarea id="content" name="content" class="form-control" required th:text="${board.content}"></textarea>
+                </div>
+            </div>
+            <div class="gym-footer">
+                <button type="submit" class="btn btn-primary">수정 완료</button>
+                <button type="button" onclick="history.go(-1)" class="btn btn-secondary">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#btnModify").click(function(){
+            var data = {
+                "num": $("#num").val(),
+                "title": $("#title").val(),
+                "content": $("#content").val()
+            };
+            $.ajax({
+                type: "PUT",
+                url: "/board/update/" + data.num,
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data),
+                success:function(resp){
+                    alert(resp + "번 글 수정 성공");
+                    location.href="/board/list";
+                },
+                error:function(e){
+                    alert("수정실패 : " + e);
+                }
+            }); //ajax
+        }); //btnModify
+    });
+</script>
+</body>
+</html>
