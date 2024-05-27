@@ -98,7 +98,8 @@
 	</nav>
 
 	<div layout:fragment="content" class="container py-5">
-		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+		<div
+			class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 d-flex justify-content-center">
 			<div class="col">
 				<div class="card shadow-sm h-100">
 					<div class="thumbnail-container">
@@ -120,7 +121,7 @@
 				</div>
 			</div>
 
-			<div class="col">
+			<div th:unless="${roles.contains('ROLE_OWNER')}" class="col">
 				<div class="card shadow-sm h-100">
 					<div class="thumbnail-container">
 						<img
@@ -132,17 +133,16 @@
 						<p class="card-text">개인회원</p>
 						<div class="d-flex justify-content-between align-items-center">
 							<div class="btn-group">
-
 								<a th:href="@{/user/mypage}"
 									class="btn btn-sm btn-outline-secondary">마이 페이지</a>
-
 							</div>
 							<small class="text-muted"><i class="fas fa-users"></i></small>
 						</div>
 					</div>
+
 				</div>
 			</div>
-<!--			<div class="col">
+			<!--			<div class="col">
 				<div class="card shadow-sm h-100">
 					<div class="thumbnail-container">
 						<img

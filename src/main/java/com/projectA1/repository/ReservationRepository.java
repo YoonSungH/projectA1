@@ -7,13 +7,14 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.projectA1.model.FitnessCenter;
 import com.projectA1.model.Reservation;
 import com.projectA1.model.User;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 
-	//List<Reservation> findByReservationTimeBefore(LocalDateTime previousMidnight);
+	List<Reservation> findByReservationTimeBefore(LocalDateTime previousMidnight);
 
 	//유저 예약된 정보 다 표시
 	List<Reservation> findAllByUserId(Long id);
@@ -21,4 +22,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 	List<Reservation> findByCenterId(Long centerId);
 
 	void deleteByUser(User user);
+
+	void deleteByCenter(FitnessCenter fitnessCenter);
 }

@@ -73,9 +73,9 @@
 										<tbody>
 											<tr th:each="board :${boards}">
 												<input type="hidden" id="num" name="num" th:value="${board.num}" />
-												<td><a th:href="'view/'+${board.num}" style="text-decoration: none; color: black">[[${board.title}]]</a></td>
+												<td><a th:href="'view/'+${board.num}">[[${board.title}]]</a></td>
 												<td th:text="${board.writer}"></td>
-												<td th:text="${board.regdate}"></td>
+												<td th:text="${#dates.format(board.regdate, 'yyyy-MM-dd')}"></td>
 												<td th:text="${board.hitcount}"></td>
 										</tbody>
 									</table>

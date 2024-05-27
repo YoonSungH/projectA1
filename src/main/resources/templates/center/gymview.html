@@ -192,35 +192,32 @@ input[type="text"]:focus, textarea:focus, input[type="number"]:focus {
 
 				// 댓글 삭제 코드
 				$(".delete-btn").click(function(e) {
-				    e.preventDefault(); // 기본 동작 방지 (페이지 이동)
+					e.preventDefault(); // 기본 동작 방지 (페이지 이동)
 
-				    var reviewId = $(this).data("review-id");
+					var reviewId = $(this).data("review-id");
 
-				    // 확인 메시지 표시
-				    if (confirm("정말 삭제하시겠습니까?")) {
-				        $.ajax({
-				            type: "GET",
-				            url: "/review/delete/" + reviewId,
-				            success: function(response) {
-				                if (response === "success") {
-				                	alert("댓글 삭제 성공!!!")
-				                    location.reload();
-				                } else {
-				                    // 실패한 경우에 대한 처리를 여기에 추가할 수 있습니다.
-				                    console.error("댓글 삭제 실패");
-				                }
-				            },
-				            error: function(xhr, status, error) {
-				                // 에러가 발생한 경우에 대한 처리를 여기에 추가할 수 있습니다.
-				                console.error("댓글 삭제 요청 실패: " + error);
-				            }
-				        });
-				    }
+					// 확인 메시지 표시
+					if (confirm("정말 삭제하시겠습니까?")) {
+						$.ajax({
+							type : "GET",
+							url : "/review/delete/" + reviewId,
+							success : function(response) {
+								if (response === "success") {
+									alert("댓글 삭제 성공!!!")
+									location.reload();
+								} else {
+									// 실패한 경우에 대한 처리를 여기에 추가할 수 있습니다.
+									console.error("댓글 삭제 실패");
+								}
+							},
+							error : function(xhr, status, error) {
+								// 에러가 발생한 경우에 대한 처리를 여기에 추가할 수 있습니다.
+								console.error("댓글 삭제 요청 실패: " + error);
+							}
+						});
+					}
 				});
 
-				
-				
-				
 			});
 </script>
 
@@ -295,19 +292,6 @@ input[type="text"]:focus, textarea:focus, input[type="number"]:focus {
 
 		<hr />
 
-		<!--         댓글 확인
-        <div class="comment-section">
-            <h2>후기 확인</h2>
-            <ul id="commentList">
-                댓글 목록
-                <li th:each="review : ${reviews}">
-                    <p>
-                        <span th:text="${review.user.name}"></span>님 >> <span th:text="${review.reviewText}"></span> / 평점 : <span th:text="${review.rating}"></span>
-                    </p>
-                </li>
-            </ul>
-        </div> -->
-
 		<!-- 댓글 확인 -->
 		<div class="comment-section">
 			<h2>후기 확인</h2>
@@ -318,11 +302,6 @@ input[type="text"]:focus, textarea:focus, input[type="number"]:focus {
 						<span th:text="${review.user.name}"></span>님 >> <span
 							th:text="${review.reviewText}"></span> / 평점 : <span
 							th:text="${review.rating}"></span>
-
-						<!-- 						삭제 버튼
-						<span th:if="${authentication.principal.userId == review.user.id}">
-							<a href="#" th:href="@{'/delete/comment/' + ${review.id}}">삭제</a>
-						</span> -->
 						<!-- 삭제 버튼 -->
 						<span th:if="${authentication.principal.userId == review.user.id}">
 							<a href="#" class="delete-btn"
@@ -334,34 +313,37 @@ input[type="text"]:focus, textarea:focus, input[type="number"]:focus {
 		</div>
 
 
+
 		<!-- 페이징 처리 -->
 		<div class="pagination">
 			<ul class="pagination">
 				<!-- 이전 -->
-				<li th:if="${currentPage > 0}"><a class="page-link"
-					th:href="@{'/centerManage/view/' + ${id} + '?page=' + (${currentPage - 1}) + '&amp;size=' + ${size}}">Previous</a>
+				<li class="page-item" th:if="${currentPage > 0}"><a
+					class="page-link"
+					th:href="@{'/centerManage/view/' + ${id} + '?page=' + (${currentPage - 1}) + '&size=' + ${size}}">Previous</a>
 				</li>
 
 				<!-- 페이지 번호 -->
 				<th:block th:if="${totalPages > 0}">
 					<th:block
 						th:each="pageNum : ${#numbers.sequence(startPage, endPage)}">
-						<li
-							th:class="${pageNum == currentPage ? 'page-item active' : 'page-item'}">
-							<a class="page-link"
-							th:href="@{'/centerManage/view/' + ${id} + '?page=' + ${pageNum} + '&amp;size=' + ${size}}"><span
-								th:text="${pageNum + 1}">1</span></a>
-						</li>
+						<li class="page-item"
+							th:classappend="${pageNum == currentPage} ? ' active'"><a
+							class="page-link"
+							th:href="@{'/centerManage/view/' + ${id} + '?page=' + ${pageNum} + '&size=' + ${size}}">
+								<span th:text="${pageNum + 1}">1</span>
+						</a></li>
 					</th:block>
 				</th:block>
 
 				<!-- 다음 -->
-				<li th:if="${currentPage < totalPages - 1}"><a
-					class="page-link"
-					th:href="@{'/centerManage/view/' + ${id} + '?page=' + (${currentPage + 1}) + '&amp;size=' + ${size}}">Next</a>
+				<li class="page-item" th:if="${currentPage < totalPages - 1}">
+					<a class="page-link"
+					th:href="@{'/centerManage/view/' + ${id} + '?page=' + (${currentPage + 1}) + '&size=' + ${size}}">Next</a>
 				</li>
 			</ul>
 		</div>
+
 	</div>
 </body>
 

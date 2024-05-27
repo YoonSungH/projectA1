@@ -1,224 +1,261 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-   layout:decorate="~{layouts/layout1}">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>대표 정보 페이지</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>대표 정보 페이지</title>
 
-    <!-- Custom fonts for this template -->
-    <link href="../../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+<!-- Custom fonts for this template -->
+<link href="../../static/vendor/fontawesome-free/css/all.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="../../static/css/sb-admin-2.min.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="../../static/css/sb-admin-2.min.css" rel="stylesheet">
 
-    <!-- 페이지 내용 설명과 가독성을 높이기 위한 추가 스타일 -->
-    <style>
-        .divider {
-            height: 1px;
-            background: #d1d3e2; /* 회색으로 변경 */
-            margin: 20px 0;
-        }
+<!-- 페이지 내용 설명과 가독성을 높이기 위한 추가 스타일 -->
+<style>
+.divider {
+	height: 1px;
+	background: #d1d3e2; /* 회색으로 변경 */
+	margin: 20px 0;
+}
 
-        .navbar .navbar-nav {
-            width: 100%;
-            justify-content: flex-end;
-        }
+.navbar .navbar-nav {
+	width: 100%;
+	justify-content: flex-end;
+}
 
-        .card-header.py-3.bg-secondary {
-            background-color: #4e73df !important; /* 카드 헤더의 배경색을 파란색으로 변경 */
-        }
+.card-header.py-3.bg-secondary {
+	background-color: #4e73df !important; /* 카드 헤더의 배경색을 파란색으로 변경 */
+}
 
-        .btn-secondary {
-            background-color: #4e73df; /* 버튼 색상을 파란색으로 변경 */
-            border-color: #4e73df; /* 버튼 테두리 색상도 파란색으로 변경 */
-        }
+.btn-secondary {
+	background-color: #4e73df; /* 버튼 색상을 파란색으로 변경 */
+	border-color: #4e73df; /* 버튼 테두리 색상도 파란색으로 변경 */
+}
 
-        .btn-secondary:hover {
-            background-color: #375a7f; /* 버튼 호버 색상을 진한 파란색으로 변경 */
-            border-color: #375a7f; /* 버튼 호버 테두리 색상도 진한 파란색으로 변경 */
-        }
-    </style>
+.btn-secondary:hover {
+	background-color: #375a7f; /* 버튼 호버 색상을 진한 파란색으로 변경 */
+	border-color: #375a7f; /* 버튼 호버 테두리 색상도 진한 파란색으로 변경 */
+}
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#ownerDelete").click(function() {
+			if (confirm('정말 삭제할까요?')) {
+				$.ajax({
+					type : "DELETE",
+					url : "/owner/delete",
+					success : function(resp) {
+						alert("Owner 탈퇴가 성공적으로 완료되었습니다.");
+						window.location.href = "/"; // 메인 페이지로 리다이렉트
+					},
+					error : function(xhr, status, error) {
+						alert("삭제 실패: " + xhr.responseText); // 실패 시 오류 메시지 표시
+					}
+				});
+			}
+		});
+	});
+</script>
 </head>
 
 
 <body id="page-top">
-   <div layout:fragment="content">
-      <div id="wrapper">
-         <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-               <div class="container-fluid">
-                  <br>
-                  <h1 class="h1 mb-1 text-gray-800">대표 정보 페이지</h1></br>
-                  <p class="mb-4" style="margin-left: 5px;">대표님의 센터 정보를 한눈에 확인하세요</p>
+	<div layout:fragment="content">
+		<div id="wrapper">
+			<div id="content-wrapper" class="d-flex flex-column">
+				<div id="content">
+					<div class="container-fluid">
+						<br>
+						<h1 class="h1 mb-1 text-gray-800">대표 정보 페이지</h1>
+						</br>
+						<p class="mb-4" style="margin-left: 5px;">대표님의 센터 정보를 한눈에
+							확인하세요</p>
 
-                  <div class="row">
-                     <div class="col-lg-6">
-                        <div class="card position-relative">
-                           <div class="card-header py-3 bg-secondary">
-                              <h4 class="m-0 font-weight-bold text-white">대표님 프로필 (ID)</h4>
-                           </div>
-                           <div class="card-body">
-                              <div class="mb-3">
-                                 <code><h1 style="margin-left: 15px;" th:text = "${authentication.name} + 님">000님</h1></code>
-                              </div>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="card position-relative">
+									<div class="card-header py-3 bg-secondary">
+										<h4 class="m-0 font-weight-bold text-white">대표님 프로필 (ID)</h4>
+									</div>
+									<div class="card-body">
+										<div class="mb-3">
+											<code>
+												<h1 style="margin-left: 15px;"
+													th:text="${authentication.name} + 님">000님</h1>
+											</code>
+										</div>
 
-                              <nav class="navbar navbar-expand navbar-light bg-light mb-4">
-                                 <a class="navbar-brand">센터 추가하기</a>
-                                 <ul class="navbar-nav">
-                                    <li class="nav-item"><a class="nav-link"
-                                          th:href="@{/centerManage/joinForm}" id="navbarDropdown"
-                                          role="button">바로 가기</a></li>
-                                 </ul>
-                              </nav>
-                              <!-- 가로 색 실선 추가 -->
-                              <div class="divider"></div>
-                              <nav class="navbar navbar-expand navbar-light bg-light mb-4">
-                                 <a class="navbar-brand">대표정보 수정</a>
-                                 <ul class="navbar-nav">
-                                    <li class="nav-item"><a class="nav-link" th:href="@{/owner/updateForm}"
-                                          id="navbarDropdown" role="button">바로 가기</a></li>
-                                 </ul>
-                              </nav>
+										<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+											<a class="navbar-brand">센터 추가하기</a>
+											<ul class="navbar-nav">
+												<li class="nav-item"><a class="nav-link"
+													th:href="@{/centerManage/joinForm}" id="navbarDropdown"
+													role="button">바로 가기</a></li>
+											</ul>
+										</nav>
+										<!-- 가로 색 실선 추가 -->
+										<div class="divider"></div>
+										<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+											<a class="navbar-brand">대표정보 수정</a>
+											<ul class="navbar-nav">
+												<li class="nav-item"><a class="nav-link"
+													th:href="@{/owner/updateForm}" id="navbarDropdown"
+													role="button">바로 가기</a></li>
+											</ul>
+										</nav>
 
-                              <!-- 가로 색 실선 추가 -->
-                              <div class="divider"></div>
-                              <nav class="navbar navbar-expand navbar-light bg-light mb-4">
-                                 <a class="navbar-brand">대표 회원탈퇴</a>
-                                 <ul class="navbar-nav">
-                                    <li class="nav-item"><a class="nav-link" 
-                                          id="ownerDelete" role="button">바로 가기</a></li>
-                                 </ul>
-                              </nav>
-                           </div>
-                        </div>
-                     </div>
+										<!-- 가로 색 실선 추가 -->
+										<div class="divider"></div>
+										<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+											<a class="navbar-brand">대표 회원탈퇴</a>
+											<ul class="navbar-nav">
+												<li class="nav-item"><a class="nav-link"
+													id="ownerDelete" role="button">바로 가기</a></li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+							</div>
 
-                     <div class="col-lg-6">
-                        <div class="card position-relative">
-                           <div class="card-header py-3 bg-secondary">
-                              <h4 class="m-0 font-weight-bold text-white">담당 센터정보</h4>
-                           </div>
+							<div class="col-lg-6">
+								<div class="card position-relative">
+									<div class="card-header py-3 bg-secondary">
+										<h4 class="m-0 font-weight-bold text-white">담당 센터정보</h4>
+									</div>
 
-                           <div class="card-body">
-                              <div class="small mb-1">
-                                 <strong>
-                                    <h2 style="margin-left: 15px;" th:text="${centerName}">센터명</h2></br>
-                                 </strong>
-                              </div>
-
-
-
-                              <div th:if="${centerName != 'notExist'}">
-                                 <!-- 가로 색 실선 추가 -->
-                                 <div class="divider"></div>
-                                 <nav class="navbar navbar-expand navbar-light bg-light mb-4">
-                                    <a class="navbar-brand">센터정보 수정</a>
-                                    <ul class="navbar-nav">
-                                       <li class="nav-item"><a class="nav-link" href="/centerManage/update"
-                                             id="navbarDropdown" role="button">바로 가기</a></li>
-                                    </ul>
-                                 </nav>
-                                 <!-- 가로 색 실선 추가 -->
-                                 <div class="divider"></div>
-                                 <nav class="navbar navbar-expand navbar-light bg-light mb-4">
-                                    <a class="navbar-brand">센터정보 삭제</a>
-                                    <ul class="navbar-nav">
-                                       <li class="nav-item"><a class="nav-link" href="/centerManage/delete"
-                                             id="navbarDropdown" role="button">바로 가기</a></li>
-                                    </ul>
-                                 </nav>
-                              </div>
+									<div class="card-body">
+										<div class="small mb-1">
+											<strong>
+												<h2 style="margin-left: 15px;" th:text="${centerName}">센터명</h2>
+												</br>
+											</strong>
+										</div>
 
 
 
-                           </div>
+										<div th:if="${centerName != 'notExist'}">
+											<!-- 가로 색 실선 추가 -->
+											<div class="divider"></div>
+											<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+												<a class="navbar-brand">센터정보 수정</a>
+												<ul class="navbar-nav">
+													<li class="nav-item"><a class="nav-link"
+														href="/centerManage/update" id="navbarDropdown"
+														role="button">바로 가기</a></li>
+												</ul>
+											</nav>
+											<!-- 가로 색 실선 추가 -->
+											<div class="divider"></div>
+											<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+												<a class="navbar-brand">센터정보 삭제</a>
+												<ul class="navbar-nav">
+													<li class="nav-item"><a class="nav-link"
+														href="/centerManage/delete" id="navbarDropdown"
+														role="button">바로 가기</a></li>
+												</ul>
+											</nav>
+										</div>
 
-                        </div>
-                     </div>
-                     
-<div class="row">
-   <div class="col-lg-6">
-      <div class="card position-relative">
-         <div class="card-header py-3 bg-secondary">
-            <h4 class="m-0 font-weight-bold text-white">예약자 리스트</h4>
-         </div>
-         <div class="card-body">
-            <div class="user-reservations">
-               <h2>예약자 리스트</h2>
-               <ul class="navbar-nav">
-                  <!-- 예약된 각 항목을 순회하면서 보여줍니다. -->
-                  <th:block th:each="reservation : ${reserve}">
-                     <li>
-                        <!-- 여기에 예약된 정보를 표시합니다. -->
-                        <p>
-                           이름: <span th:text="${reservation.user.name}"></span><br> 
-                           예약시간: <span th:text="${#dates.format(reservation.reservationTime, 'yyyy-MM-dd HH:mm')}"></span>
-                        </p>
-                     </li>
-                  </th:block>
-               </ul>
-            </div>
-         </div>
-      </div>
-   </div>
-                           
-                           
-                  </div>
-               </div>
-            </div>
 
-            <footer class="sticky-footer bg-white">
-               <div class="container my-auto">
-                  <div class="copyright text-center my-auto">
-                     <span>Copyright &copy; Your Website 2020</span>
-                  </div>
-               </div>
-            </footer>
-         </div>
-      </div>
 
-      <a class="scroll-to-top rounded" href="#page-top">
-         <i class="fas fa-angle-up"></i>
-      </a>
+									</div>
 
-      <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                     <span aria-hidden="true">×</span>
-                  </button>
-               </div>
-               <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-               <div class="modal-footer">
-                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                  <a class="btn btn-primary" href="login.html">Logout</a>
-               </div>
-            </div>
-         </div>
-      </div>
+								</div>
+							</div>
 
-      <!-- Bootstrap core JavaScript -->
-      <script src="../../static/vendor/jquery/jquery.min.js"></script>
-      <script src="../../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="card position-relative">
+										<div class="card-header py-3 bg-secondary">
+											<h4 class="m-0 font-weight-bold text-white">예약자 리스트</h4>
+										</div>
+										<div class="card-body">
+											<div class="user-reservations">
+												<h2>예약자 리스트</h2>
+												<ul class="navbar-nav">
+													<!-- 예약된 각 항목을 순회하면서 보여줍니다. -->
+													<th:block th:each="reservation : ${reserve}">
+														<li>
+															<!-- 여기에 예약된 정보를 표시합니다. -->
+															<p>
+																이름: <span th:text="${reservation.user.name}"></span><br>
+																예약시간: <span
+																	th:text="${#dates.format(reservation.reservationTime, 'yyyy-MM-dd HH:mm')}"></span>
+															</p>
+														</li>
+													</th:block>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
 
-      <!-- Core plugin JavaScript -->
-      <script src="../../static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-      <!-- Custom scripts for all pages -->
-      <script src="../../static/js/sb-admin-2.min.js"></script>
-   </div>
+							</div>
+						</div>
+					</div>
 
+					<footer class="sticky-footer bg-white">
+						<div class="container my-auto">
+							<div class="copyright text-center my-auto">
+								<span>Copyright &copy; Your Website 2020</span>
+							</div>
+						</div>
+					</footer>
+				</div>
+			</div>
+
+			<a class="scroll-to-top rounded" href="#page-top"> <i
+				class="fas fa-angle-up"></i>
+			</a>
+
+			<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Ready to
+								Leave?</h5>
+							<button class="close" type="button" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">Select "Logout" below if you are
+							ready to end your current session.</div>
+						<div class="modal-footer">
+							<button class="btn btn-secondary" type="button"
+								data-dismiss="modal">Cancel</button>
+							<a class="btn btn-primary" href="login.html">Logout</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Bootstrap core JavaScript -->
+			<script src="../../static/vendor/jquery/jquery.min.js"></script>
+			<script
+				src="../../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+			<!-- Core plugin JavaScript -->
+			<script src="../../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+			<!-- Custom scripts for all pages -->
+			<script src="../../static/js/sb-admin-2.min.js"></script>
+		</div>
 </body>
 
 </html>

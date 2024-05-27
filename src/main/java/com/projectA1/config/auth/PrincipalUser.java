@@ -20,6 +20,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PrincipalUser implements UserDetails {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//범용 user
     private Object user;
 
